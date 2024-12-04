@@ -2,8 +2,11 @@ import torch
 import sklearn as sk
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
 import pandas as pd
 import numpy as np
+
+import obj_fun
 
 # prepare the dataset and split into train and test subsections
 dataset = pd.read_csv('data/df_file.csv').to_numpy()
@@ -11,7 +14,14 @@ X = dataset[:, 0]
 y = dataset[:, 1]
 enc = CountVectorizer()
 X = enc.fit_transform(X).toarray()
-dataset = np.c_[X, y]
-print(dataset)
-train_test_split(dataset, shuffle=True, test_size=0.3)
+X_train, X_test, y_train, y_test = train_test_split(X, y, shuffle=True, test_size=0.3)
+print(y_train)
+y_train = y_train.astype('int')
+y_test = y_test.astype('int')
+n, d = X_train.shape
 
+
+classifier = obj_fun.SoftmaxClassifier(num_classes=5, num_features=d)
+classifier.train(X_train, y_train)
+y_pred = classifier.predict(X_test)
+print(f"Accuracy is {np.mean(y_pred != y_test)}")
