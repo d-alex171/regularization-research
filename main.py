@@ -21,7 +21,17 @@ y_test = y_test.astype('int')
 n, d = X_train.shape
 
 
-classifier = obj_fun.SoftmaxClassifier(num_classes=5, num_features=d)
-classifier.train(X_train, y_train)
+classifier = obj_fun.SoftmaxClassifierL2(num_classes=5, num_features=d)
+classifier.train(X_train, y_train, epochs=100)
 y_pred = classifier.predict(X_test)
-print(f"Accuracy is {np.mean(y_pred != y_test)}")
+print(f"L2 Accuracy is {np.mean(y_pred != y_test)}")
+
+classifier = obj_fun.SoftmaxClassifierL1(num_classes=5, num_features=d)
+classifier.train(X_train, y_train, epochs=100)
+y_pred = classifier.predict(X_test)
+print(f"L1 Accuracy is {np.mean(y_pred != y_test)}")
+
+classifier = obj_fun.SoftmaxClassifierL0(num_classes=5, num_features=d)
+classifier.train(X_train, y_train, epochs=100)
+y_pred = classifier.predict(X_test)
+print(f"L0 Accuracy is {np.mean(y_pred != y_test)}")
